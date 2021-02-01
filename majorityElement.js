@@ -16,8 +16,6 @@ const majorityElement = (nums) => {
     } else {
       counts[num] = 1;
     }
-  }
-  for (let num of nums) {
     if (counts[num] > majority) {
       return num;
     }
