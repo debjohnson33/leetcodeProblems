@@ -13,23 +13,13 @@ For a = [2, 4, 3, 5, 1], the output should be firstDuplicate(a) = -1.
 */
 debugger;
 function firstDuplicate(a) {
-  const seen = new Array(a.length);
+  const seen = [];
 
-  for (let i = 0; i < seen.length; i++) {
-    seen.push(0);
-  }
-
-  for (let j = 0; j < a.length; j++) {
-    for (let k = 1; k < a.length; k++) {
-      if (a[j] === a[k]) {
-        seen[k] = 1;
-      }
-    }
-  }
-
-  for (let l = 0; l < seen.length; l++) {
-    if (seen[l] === 1) {
-      return a[l];
+  for (let num of a) {
+    if (seen[num]) {
+      return num;
+    } else {
+      seen[num] = 1;
     }
   }
 
