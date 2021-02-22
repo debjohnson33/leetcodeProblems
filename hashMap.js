@@ -10,13 +10,8 @@ get(key): Returns the value to which the specified key is mapped, or -1 if this 
 remove(key) : Remove the mapping for the value key if this map contains the mapping for the key.
 */
 
-
-var MyHashMap = function() {
-  this.storage = [];
-  this.length = this.storage.length;
-};
-
-MyHashMap.prototype.getIndexBelowMaxForKey = function(str, max) {
+debugger;
+var getIndexBelowMaxForKey = function(str, max) {
   var hash = 0;
   for (var i = 0; i < str.length; i++) {
     hash = (hash << 5) + hash + str.charCodeAt(i);
@@ -26,6 +21,11 @@ MyHashMap.prototype.getIndexBelowMaxForKey = function(str, max) {
   return hash % max;
 };
 
+var MyHashMap = function() {
+  this.storage = new Array(30);
+  this.length = this.storage.length;
+};
+
 /**
  * value will always be non-negative.
  * @param {number} key
@@ -33,8 +33,12 @@ MyHashMap.prototype.getIndexBelowMaxForKey = function(str, max) {
  * @return {void}
  */
 MyHashMap.prototype.put = function(key, value) {
-  let index = this.getIndexBelowMaxForKey(key, this.length);
-  let bucket = this.storage[index] ? this.storage[index] = value : [];
+  let index = getIndexBelowMaxForKey(key, this.length);
+  let bucket = this.storage[index];
+  if (!bucket) {
+    bucket = [];
+    this.storage[index] = bucket;
+  }
 
   let found = false;
   for (let i = 0; i < bucket.length; i++) {
@@ -44,10 +48,11 @@ MyHashMap.prototype.put = function(key, value) {
       found = true;
     }
   }
-  if (!found) {
+  if (found === false) {
     let tuple = {};
     tuple[key] = value;
     bucket.push(tuple);
+    this.length++;
   }
 };
 
@@ -57,8 +62,11 @@ MyHashMap.prototype.put = function(key, value) {
  * @return {number}
  */
 MyHashMap.prototype.get = function(key) {
-  let index = this.getIndexBelowMaxForKey(key, this.length);
-  let bucket = this.storage[index] || [];
+  let index = getIndexBelowMaxForKey(key, this.length);
+  let bucket = this.storage[index];
+  if (!bucket) {
+    return -1;
+  }
   for (let i = 0; i < bucket.length; i++) {
     let tuple = bucket[i];
     if (tuple[key]) {
@@ -74,8 +82,8 @@ MyHashMap.prototype.get = function(key) {
  * @return {void}
  */
 MyHashMap.prototype.remove = function(key) {
-  let index = this.getIndexBelowMaxForKey(key, this.length);
-  let bucket = this.storage[index] || [];
+  let index = getIndexBelowMaxForKey(key, this.length);
+  let bucket = this.storage[index];
   if (!bucket) {
     return null;
   }
@@ -84,21 +92,27 @@ MyHashMap.prototype.remove = function(key) {
     if (tuple[key]) {
       let temp = tuple[key];
       bucket.splice(i, 1);
-      return temp;
+      this.length--;
     }
   }
 };
-
+/* ["MyHashMap","remove","put","put","put","put","put","put","get","put","put"]
+[[],[2],[3,11],[4,13],[15,6],[6,15],[8,8],[11,0],[11],[1,10],[12,14]]*/
 const test = () => {
   const hashMap = new MyHashMap();
-  console.log(hashMap.put(1, 1));
-  console.log(hashMap.put(2, 2));
-  console.log(hashMap.get(1));            // returns 1
-  console.log(hashMap.get(3));            // returns -1 (not found)
-  console.log(hashMap.put(2, 1));          // update the existing value
-  console.log(hashMap.get(2));            // returns 1
-  console.log(hashMap.remove(2));          // remove the mapping for 2
-  console.log(hashMap.get(2));            // returns -1 (not found)
+  console.log(hashMap.put(3, 11));
+  console.log(hashMap.put(4, 13));
+  console.log(hashMap.put(15, 6));
+  console.log(hashMap.put(6, 15));
+  console.log(hashMap.put(8, 8));
+  console.log(hashMap.put(11, 0));
+  console.log(hashMap.get(11));            // returns 0
+  console.log(hashMap.put(1, 10));
+  console.log(hashMap.put(12, 14));
+  console.log(hashMap.get(12));            // returns 14
+  console.log(hashMap.remove(12));          // remove the mapping for 2
+  console.log(hashMap.get(12));            // returns -1 (not found)
+  console.log(hashMap.length);
 };
 
 test();
