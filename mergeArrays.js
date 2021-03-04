@@ -20,19 +20,24 @@ nums2.length == n
 1 <= m + n <= 200
 -109 <= nums1[i], nums2[i] <= 109
 */
-
+debugger;
 const merge = (nums1, m, nums2, n) => {
-  if (n === 0) return nums1;
+  let p1 = m - 1;
+  let p2 = n - 1;
+  let p = m + n - 1;
 
-  for (let i = 0; i < nums2.length; i++) {
-    for (let j = 0; j < nums1.length; j++) {
-      if (nums2[i] >= nums1[j]) {
-        if (nums1[j + 1] === 0 || nums1[j] > nums2[i]) {
-          nums1.splice(j, 0, nums2[i]);
-          nums1.pop();
-        }
-      }
+  while (p >= 0) {
+    if (p2 < 0) {
+      break;
     }
+    if (p1 >= 0 && nums1[p1] > nums2[p2]) {
+      nums1[p] = nums1[p1];
+      p1--;
+    } else {
+      nums1[p] = nums2[p2];
+      p2--;
+    }
+    p--;
   }
   return nums1;
 };
