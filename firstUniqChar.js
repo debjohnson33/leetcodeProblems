@@ -35,7 +35,7 @@ const test = () => {
   console.log(example1);
   const example2 = firstUniqChar("loveleetcode"); // 2
   console.log(example2);
-  const example3 = firstUniqChar("reading"); // -1
+  const example3 = firstUniqChar("aabb"); // -1
   console.log(example3);
 };
 
