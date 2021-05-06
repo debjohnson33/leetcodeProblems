@@ -30,14 +30,20 @@ Constraints:
 -100 <= nums[i] <= 100
 */
 
+const signFunc = (product) => {
+  if (product > 0) {
+    return 1;
+  } else if (product < 0) {
+    return -1;
+  } else {
+    return 0;
+  }
+};
+
 const arraySign = (nums) => {
-  // find product
   let product = nums.reduce((acc, val) => acc * val);
-  // check if product is positive
-  //   yes, return 1
-  // product negative return -1
-  // product 0 return 0
-  return product;
+
+  return signFunc(product);
 };
 
 const test = () => {
